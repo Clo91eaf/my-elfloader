@@ -22,15 +22,15 @@ pub struct LoadElfResult {
 
 pub struct Sim {
     mem: Vec<u8>,
-    sz: usize
+    size: usize,
 }
 
 impl Sim {
-    pub fn new(sz: usize) -> Self {
+    pub fn new(size: usize) -> Self {
         Sim {
-            mem: vec![0;sz],
-            sz
-        }        
+            mem: vec![0; size],
+            size,
+        }
     }
 
     pub fn load_elf(&mut self, fname: &str) -> Result<LoadElfResult, Box<dyn std::error::Error>> {
@@ -52,9 +52,10 @@ impl Sim {
                         let offset = ph.offset as usize;
                         let size = ph.file_size as usize;
                         let addr = ph.virtual_addr as usize;
+
                         let slice = &buffer[offset..offset + size];
-    
-                        self.mem.splice(addr..addr+size, slice.iter().cloned());
+                        assert!(addr + size < self.size);
+                        self.mem.splice(addr..addr + size, slice.iter().cloned());
                     }
                 }
                 _ => (),
@@ -65,7 +66,6 @@ impl Sim {
             entry_addr: header.pt2.entry_point() as u64,
         })
     }
-
 }
 fn main() {
     let args = Args::parse();
@@ -74,5 +74,3 @@ fn main() {
 
     let _ = sim.load_elf(&args.file);
 }
-
-
