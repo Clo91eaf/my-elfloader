@@ -49,9 +49,12 @@ impl Sim {
             match ph {
                 ProgramHeader::Ph64(ph) => {
                     if ph.get_type() == Ok(Type::Load) {
-                        let _offset = ph.offset as usize;
-                        let _size = ph.file_size as usize;
-                        let _addr = ph.virtual_addr as usize;
+                        let offset = ph.offset as usize;
+                        let size = ph.file_size as usize;
+                        let addr = ph.virtual_addr as usize;
+                        let slice = &buffer[offset..offset + size];
+    
+                        self.mem.splice(addr..addr+size, slice.iter().cloned());
                     }
                 }
                 _ => (),
