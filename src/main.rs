@@ -7,6 +7,9 @@ use xmas_elf::{
     ElfFile,
 };
 
+mod processor;
+use processor::Processor;
+
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -67,10 +70,11 @@ impl Sim {
         })
     }
 }
+
 fn main() {
     let args = Args::parse();
 
-    let mut sim = Sim::new(1000usize);
+    let mut sim = Sim::new(0x100000usize);
 
     let _ = sim.load_elf(&args.file);
 }

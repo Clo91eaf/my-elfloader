@@ -4,3 +4,4 @@ Cargo.lock
 
 # Custom
 *.code-workspace
+.vscode
