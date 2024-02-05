@@ -1,8 +1,9 @@
 #include "wrapper.h"
 #include "include/riscv/processor.h"
 
-Wrapper::Wrapper(simif_t sim) 
-      sim(1l << 32), isa("rv32gcv", "M"),
+Wrapper::Wrapper()
+    : sim(1l << 32),
+      isa("rv32gcv", "M"),
       cfg(/*default_initrd_bounds=*/std::make_pair((reg_t)0, (reg_t)0),
           /*default_bootargs=*/nullptr,
           /*default_isa=*/DEFAULT_ISA,
@@ -22,6 +23,5 @@ Wrapper::Wrapper(simif_t sim)
           /*id*/ 0,
           /*halt on reset*/ true,
           /*log_file_t*/ nullptr,
-          /*sout*/ std::cerr),
-
-ProcessorPtr Processor_new();
+          /*sout*/ std::cerr) {}
+          
