@@ -7,8 +7,7 @@ use xmas_elf::{
     ElfFile,
 };
 
-mod processor;
-use processor::Processor;
+include!("../libspike/lib.rs");
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]

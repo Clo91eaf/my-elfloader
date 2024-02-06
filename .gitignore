@@ -1,4 +1,5 @@
 # Rust
+libspike/target
 /target
 Cargo.lock
 
