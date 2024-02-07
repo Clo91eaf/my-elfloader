@@ -1,4 +1,4 @@
-#[link(name = "spike-interfaces", kind = "static")]
+#[link(name = "spike-interfaces")]
 extern "C" {
     pub fn spike_new(mem_size: u64) -> u64;
     pub fn spike_delete(spike: u64);
