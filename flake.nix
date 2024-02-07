@@ -8,7 +8,7 @@
 
   outputs = { self, nixpkgs, flake-utils }@inputs:
     let
-      overlay = import ./nix/overlay.nix { inherit self; };
+      overlay = import ./nix/overlay.nix;
     in
     flake-utils.lib.eachDefaultSystem
       (system:
@@ -17,19 +17,6 @@
         in
         {
           legacyPackages = pkgs;
-          devShells = {
-            default = pkgs.mkShell {
-              buildInputs = with pkgs; [
-                gnumake
-                gnugrep
-                gnused
-
-                python3
-                mill
-                ammonite
-              ];
-            };
-          };
           formatter = pkgs.nixpkgs-fmt;
         }
       )

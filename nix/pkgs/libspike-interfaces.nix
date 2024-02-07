@@ -1,14 +1,9 @@
-{ stdenv, lib, cmake, libspike }:
+{ stdenv, cmake, libspike }:
 
 stdenv.mkDerivation {
   name = "libspike-interfaces";
 
-  src = (with lib.fileset; toSource {
-      root = ./../..;
-      fileset = unions [
-        ./../../csrc
-      ];
-    }).outPath;
+  src = ../../csrc;
 
   nativeBuildInputs = [
     cmake

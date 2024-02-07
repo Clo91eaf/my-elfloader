@@ -7,4 +7,4 @@ Cargo.lock
 *.code-workspace
 .vscode
 riscv-isa-sim/
-result/
+result
