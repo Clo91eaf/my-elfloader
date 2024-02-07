@@ -6,3 +6,4 @@ Cargo.lock
 # Custom
 *.code-workspace
 .vscode
+riscv-isa-sim/

@@ -7,7 +7,7 @@ use xmas_elf::{
     ElfFile,
 };
 
-include!("../libspike/lib.rs");
+include!("./lib.rs");
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -23,15 +23,13 @@ pub struct LoadElfResult {
 }
 
 pub struct Sim {
-    mem: Vec<u8>,
-    size: usize,
+    spike: Spike,
 }
 
 impl Sim {
     pub fn new(size: usize) -> Self {
-        Sim {
-            mem: vec![0; size],
-            size,
+        Self {
+            spike: Spike::new(size as u64),
         }
     }
 
@@ -56,8 +54,8 @@ impl Sim {
                         let addr = ph.virtual_addr as usize;
 
                         let slice = &buffer[offset..offset + size];
-                        assert!(addr + size < self.size);
-                        self.mem.splice(addr..addr + size, slice.iter().cloned());
+                        assert!(addr + size < self.spike.size);
+                        self.spike.sd(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
                     }
                 }
                 _ => (),
@@ -73,7 +71,7 @@ impl Sim {
 fn main() {
     let args = Args::parse();
 
-    let mut sim = Sim::new(0x100000usize);
+    let mut sim = Sim::new(1usize << 32);
 
-    let _ = sim.load_elf(&args.file);
+    sim.load_elf(&args.file).unwrap();
 }
