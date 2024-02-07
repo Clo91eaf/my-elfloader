@@ -1,12 +1,12 @@
 { stdenv, dtc, fetchFromGitHub }:
 let
   version = "1.1.0";
-  pname = "mylibspike";
+  pname = "libspike";
   cmakeConfig = ''
-    add_library(mylibspike STATIC IMPORTED GLOBAL)
-    set_target_properties(mylibspike PROPERTIES
+    add_library(libspike STATIC IMPORTED GLOBAL)
+    set_target_properties(libspike PROPERTIES
       IMPORTED_LOCATION "${placeholder "out"}/lib/libriscv.so")
-    target_include_directories(mylibspike AFTER INTERFACE
+    target_include_directories(libspike AFTER INTERFACE
       "${placeholder "out"}/include"
       "${placeholder "out"}/include/riscv"
       "${placeholder "out"}/include/fesvr"

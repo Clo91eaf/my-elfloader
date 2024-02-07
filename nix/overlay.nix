@@ -72,5 +72,5 @@ in
   #     };
   # };
 
-  # t1 = final.callPackage ./t1 { };
+  t1 = final.callPackage ./t1 { };
 }
