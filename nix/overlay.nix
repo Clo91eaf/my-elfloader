@@ -15,6 +15,7 @@ in
   # espresso = final.callPackage ./pkgs/espresso.nix { };
   # dramsim3 = final.callPackage ./pkgs/dramsim3.nix { };
   libspike = final.callPackage ./pkgs/libspike.nix { };
+  libspike-interfaces = final.callPackage ./pkgs/libspike-interfaces.nix { };
   # buddy-mlir = final.callPackage ./pkgs/buddy-mlir.nix { };
   # fetchMillDeps = final.callPackage ./pkgs/mill-builder.nix { };
 
@@ -72,5 +73,5 @@ in
   #     };
   # };
 
-  t1 = final.callPackage ./t1 { };
+  # t1 = final.callPackage ./t1 { };
 }

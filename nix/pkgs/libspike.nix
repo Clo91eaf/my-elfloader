@@ -1,6 +1,6 @@
 { stdenv, dtc, fetchFromGitHub }:
 let
-  version = "1.1.0";
+  version = "1.0.0";
   pname = "libspike";
   cmakeConfig = ''
     add_library(libspike STATIC IMPORTED GLOBAL)
@@ -34,7 +34,6 @@ stdenv.mkDerivation {
     cp fesvr/*.h $out/include/fesvr
     cp softfloat/*.h $out/include/softfloat
     cp config.h $out/include
-    cp 
     cp *.so $out/lib
     echo "$cmakeConfig" > $out/lib/cmake/libspike/libspike-config.cmake
     runHook postInstall
