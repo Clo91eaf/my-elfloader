@@ -18,10 +18,9 @@ impl std::fmt::Display for Error {
 }
 impl std::error::Error for Error {}
 
-#[allow(dead_code)]
 pub struct Spike {
-    addr: u64,
-    size: usize,
+    pub addr: u64,
+    pub size: usize,
 }
 
 impl Spike {

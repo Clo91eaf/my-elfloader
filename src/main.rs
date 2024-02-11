@@ -7,7 +7,8 @@ use xmas_elf::{
     ElfFile,
 };
 
-include!("./lib.rs");
+extern crate my_elfloader;
+use my_elfloader::Spike;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
