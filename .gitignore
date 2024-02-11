@@ -1,7 +1,6 @@
 # Rust
 libspike/target
 /target
-Cargo.lock
 
 # Custom
 *.code-workspace
