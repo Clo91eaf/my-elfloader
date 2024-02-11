@@ -10,21 +10,18 @@ let
     rustc = myRustToolchain;
   };
 
-  self = myRustPlatform.buildRustPackage
-    {
-      pname = "elf-loader";
-      version = "0.1.0";
+  self = myRustPlatform.buildRustPackage {
+    pname = "elf-loader";
+    version = "0.1.0";
 
-      src = ../../.;
+    src = ../../.;
 
-      # Build time & Runtime dependencies
-      nativeBuildInputs = [ pkg-config llvmPackages_16.bintools ];
-      # Link time dependencies
-      buildInputs = [ libspike-interfaces ];
+    # Link time dependencies
+    buildInputs = [ libspike-interfaces ];
 
-      cargoLock = {
-        lockFile = ../Cargo.lock;
-      };
+    cargoLock = {
+      lockFile = ../Cargo.lock;
     };
+  };
 in
 self
