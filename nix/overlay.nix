@@ -6,5 +6,5 @@ final: prev:
   myRustToolchain = final.rust-bin.stable.latest.default.override {
     extensions = [ "rust-src" ];
   };
-  elf-loader = final.callPackage ./pkgs/elf-loader.nix { };
+  my-elfloader = final.callPackage ./pkgs/my-elfloader.nix { };
 }

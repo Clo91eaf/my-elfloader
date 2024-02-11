@@ -11,7 +11,7 @@ let
   };
 
   self = myRustPlatform.buildRustPackage {
-    pname = "elf-loader";
+    pname = "my-elfloader";
     version = "0.1.0";
 
     src = ../../.;
