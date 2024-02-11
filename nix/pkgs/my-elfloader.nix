@@ -20,7 +20,7 @@ let
     buildInputs = [ libspike-interfaces ];
 
     cargoLock = {
-      lockFile = ../Cargo.lock;
+      lockFile = ../../Cargo.lock;
     };
   };
 in

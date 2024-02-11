@@ -1,5 +1,5 @@
 {
-  description = "Elf loader";
+  description = "My elf loader";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
