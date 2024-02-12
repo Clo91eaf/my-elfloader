@@ -43,8 +43,7 @@ impl Sim {
 
         let header = elf_file.header;
         assert_eq!(header.pt2.machine().as_machine(), header::Machine::RISC_V);
-        assert_eq!(header.pt2.type_().as_type(), header::Type::Executable);
-        assert_eq!(header.pt1.class(), header::Class::ThirtyTwo);
+        assert_eq!(header.pt1.class(), header::Class::SixtyFour);
 
         for ph in elf_file.program_iter() {
             match ph {
@@ -56,6 +55,7 @@ impl Sim {
 
                         let slice = &buffer[offset..offset + size];
                         assert!(addr + size < self.spike.size);
+                        println!("addr: {addr}, size: 0x{:x}", size);
                         self.spike.sd(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
                     }
                 }
