@@ -14,7 +14,7 @@
     in
     flake-utils.lib.eachDefaultSystem (system:
       let
-        overlays = [ (import rust-overlay) t1.overlays overlay ];
+        overlays = [ (import rust-overlay) t1.overlays.default overlay ];
         pkgs = import nixpkgs { inherit system overlays; };
         rs-toolchain = pkgs.rust-bin.stable.latest.default.override {
           extensions = [ "rust-src" ];

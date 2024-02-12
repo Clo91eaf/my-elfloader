@@ -7,5 +7,5 @@ final: prev:
     extensions = [ "rust-src" ];
   };
   my-elfloader = final.callPackage ./pkgs/my-elfloader.nix { };
-  cases = final.t1.makeTestCase { };
+  cases = final.t1.makeTestCase { xLen = 32; vLen = 1024; };
 }
