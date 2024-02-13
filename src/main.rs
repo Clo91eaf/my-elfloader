@@ -1,7 +1,7 @@
-use clap::Parser;
-
 mod sim;
+
 use sim::Sim;
+use clap::Parser;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -18,4 +18,6 @@ fn main() {
     let mut sim = Sim::new(1usize << 32);
 
     sim.load_elf(&args.file).unwrap();
+
+    sim.exec().unwrap();
 }

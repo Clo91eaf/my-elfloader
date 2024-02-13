@@ -2,7 +2,7 @@
 extern "C" {
     pub fn spike_new(mem_size: u64) -> u64;
     pub fn spike_delete(spike: u64);
-    pub fn spike_execute(spike: u64, instruction: u64) -> i32;
+    pub fn spike_execute(spike: u64) -> i32;
     pub fn spike_get_reg(spike: u64, index: u64, content: *mut u64) -> i32;
     pub fn spike_set_reg(spike: u64, index: u64, content: u64) -> i32;
     pub fn spike_ld(spike: u64, addr: u64, len: u64, bytes: *mut u8) -> i32;
@@ -34,8 +34,8 @@ impl Spike {
         }
     }
 
-    pub fn execute(&self, instruction: u64) -> Result<(), Error> {
-        let r = unsafe { spike_execute(self.addr, instruction) };
+    pub fn execute(&self) -> Result<(), Error> {
+        let r = unsafe { spike_execute(self.addr) };
         if r != 0 {
             Err(Error(r))
         } else {

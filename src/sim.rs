@@ -9,10 +9,6 @@ use xmas_elf::{
 extern crate my_elfloader;
 use my_elfloader::Spike;
 
-pub struct LoadElfResult {
-    pub entry_addr: u64,
-}
-
 pub struct Sim {
     spike: Spike,
 }
@@ -24,7 +20,7 @@ impl Sim {
         }
     }
 
-    pub fn load_elf(&mut self, fname: &str) -> Result<LoadElfResult, Box<dyn std::error::Error>> {
+    pub fn load_elf(&mut self, fname: &str) -> Result<(), Box<dyn std::error::Error>> {
         let mut file = File::open(fname)?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
@@ -46,16 +42,19 @@ impl Sim {
                         let slice = &buffer[offset..offset + size];
                         assert!(addr + size < self.spike.size);
                         println!("addr: {addr}, size: 0x{:x}", size);
-                        self.spike
-                            .ld_elf(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
+                        self.spike.ld_elf(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
                     }
                 }
                 _ => (),
             }
         }
 
-        Ok(LoadElfResult {
-            entry_addr: header.pt2.entry_point() as u64,
-        })
+        Ok(())
+    }
+
+    pub fn exec(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+        self.spike.execute()?;
+
+        Ok(())
     }
 }
