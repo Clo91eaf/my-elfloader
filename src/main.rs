@@ -43,7 +43,7 @@ impl Sim {
 
         let header = elf_file.header;
         assert_eq!(header.pt2.machine().as_machine(), header::Machine::RISC_V);
-        assert_eq!(header.pt1.class(), header::Class::SixtyFour);
+        assert_eq!(header.pt1.class(), header::Class::ThirtyTwo);
 
         for ph in elf_file.program_iter() {
             match ph {
