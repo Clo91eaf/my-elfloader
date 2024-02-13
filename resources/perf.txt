@@ -1,0 +1,11 @@
+total_cycles: 222651
+vrf_write_records: 599550/1781208 (33.660%)
+adder_occupied: 52172/1781208 (2.929%)
+shifter_occupied: 90720/1781208 (5.093%)
+multiplier_occupied: 0/1781208 (0.000%)
+divider_occupied: 0/1781208 (0.000%)
+bank_0_avg_pending_req: -7075847830/222651 (-31779.996)
+bank_0_occupied: 222646/222651 (99.998%)
+bank_1_avg_pending_req: -8844251428/222651 (-39722.487)
+bank_1_occupied: 222647/222651 (99.998%)
+chaining_size: 1275480/1781208 (71.608%)
