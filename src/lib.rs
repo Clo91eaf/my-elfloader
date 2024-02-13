@@ -7,6 +7,7 @@ extern "C" {
     pub fn spike_set_reg(spike: u64, index: u64, content: u64) -> i32;
     pub fn spike_ld(spike: u64, addr: u64, len: u64, bytes: *mut u8) -> i32;
     pub fn spike_sd(spike: u64, addr: u64, len: u64, bytes: *mut u8) -> i32;
+    pub fn spike_ld_elf(spike: u64, addr: u64, len: u64, bytes: *mut u8) -> i32;
 }
 
 #[derive(Debug)]
@@ -72,6 +73,15 @@ impl Spike {
 
     pub fn sd(&self, addr: u64, len: u64, bytes: *mut u8) -> Result<(), Error> {
         let r = unsafe { spike_sd(self.addr, addr, len, bytes) };
+        if r != 0 {
+            Err(Error(r))
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn ld_elf(&self, addr: u64, len: u64, bytes: *mut u8) -> Result<(), Error> {
+        let r = unsafe { spike_ld_elf(self.addr, addr, len, bytes) };
         if r != 0 {
             Err(Error(r))
         } else {

@@ -154,7 +154,6 @@ class sim_t : public simif_t {
     if (uart_addr <= addr && addr < uart_addr + sizeof(uartlite_regs)) {
       return uart.do_read(addr - uart_addr, len, bytes);
     }
-    // FATAL(fmt::format("Unknown MMIO load address ({:016X})", addr));
     assert(0);
   }
 
@@ -166,10 +165,15 @@ class sim_t : public simif_t {
         std::cerr.flush();
       }
       return res;
-      // FATAL(fmt::format("Unknown MMIO load address ({:016X})", addr));}
     }
     assert(0);
-  };
+  }
+
+  bool load_elf(reg_t addr, size_t len, const uint8_t* bytes) {
+    memcpy(&mem[addr], bytes, len);
+    return true;
+  }
+
   virtual void proc_reset(unsigned id) override {}
   virtual const char* get_symbol(uint64_t addr) override { return NULL; }
   [[nodiscard]] const cfg_t &get_cfg() const override {
@@ -295,5 +299,16 @@ int spike_sd(uint64_t spike, uint64_t addr, uint64_t len, uint8_t* bytes) {
     return 0;
   } else {
     return -3;
+  }
+}
+
+int spike_ld_elf(uint64_t spike, uint64_t addr, uint64_t len, uint8_t* bytes) {
+  Spike* s = (Spike*)spike;
+  sim_t* sim = s->get_sim();
+  bool success = sim->load_elf(addr, len, bytes);
+  if (success) {
+    return 0;
+  } else {
+    return -4;
   }
 }

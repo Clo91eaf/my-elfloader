@@ -14,6 +14,7 @@ int32_t spike_get_reg(uint64_t spike, uint64_t index, uint64_t *content);
 int32_t spike_set_reg(uint64_t spike, uint64_t index, uint64_t content);
 int spike_ld(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
 int spike_sd(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
+int spike_ld_elf(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
 
 #ifdef __cplusplus
 }

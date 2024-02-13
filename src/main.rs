@@ -47,7 +47,7 @@ impl Sim {
 
         for ph in elf_file.program_iter() {
             match ph {
-                ProgramHeader::Ph64(ph) => {
+                ProgramHeader::Ph32(ph) => {
                     if ph.get_type() == Ok(Type::Load) {
                         let offset = ph.offset as usize;
                         let size = ph.file_size as usize;
@@ -56,7 +56,7 @@ impl Sim {
                         let slice = &buffer[offset..offset + size];
                         assert!(addr + size < self.spike.size);
                         println!("addr: {addr}, size: 0x{:x}", size);
-                        self.spike.sd(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
+                        self.spike.ld_elf(addr as u64, size as u64, slice.as_ptr() as *mut u8)?;
                     }
                 }
                 _ => (),
