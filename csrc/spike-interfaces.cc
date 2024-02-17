@@ -236,10 +236,11 @@ uint64_t spike_new(uint64_t mem_size) {
   return (uint64_t)spike;
 }
 
-void spike_delete(uint64_t spike) {
+int32_t spike_delete(uint64_t spike) {
   Spike* s = (Spike*)spike;
-  std::cerr << "Deleting spike: " << s << std::endl;
   delete s;
+
+  return SPIKE_SUCCESS;
 }
 
 int32_t spike_execute(uint64_t spike) {

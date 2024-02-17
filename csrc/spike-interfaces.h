@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 uint64_t spike_new(uint64_t mem_size);
-void spike_delete(uint64_t spike);
+int32_t spike_delete(uint64_t spike);
 int32_t spike_execute(uint64_t spike);
 int32_t spike_get_reg(uint64_t spike, uint64_t index, uint64_t *content);
 int32_t spike_set_reg(uint64_t spike, uint64_t index, uint64_t content);
