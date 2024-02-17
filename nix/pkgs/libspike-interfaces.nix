@@ -1,4 +1,4 @@
-{ stdenv, cmake, libspike }:
+{ stdenv, cmake, libspike, fmt }:
 
 stdenv.mkDerivation {
   name = "libspike-interfaces";
@@ -11,5 +11,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libspike
+    fmt
   ];
 }
