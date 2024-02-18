@@ -69,8 +69,8 @@ impl Sim {
 		Ok(())
 	}
 
-	pub fn test(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-		self.dut.test().unwrap();
+	pub fn test(&mut self, config: String) -> Result<(), Box<dyn std::error::Error>> {
+		self.dut.test(config).unwrap();
 
 		Ok(())
 	}

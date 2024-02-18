@@ -15,6 +15,9 @@ struct Args {
 
 	#[arg(short, long)]
 	fst_file: String,
+
+	#[arg(short, long)]
+	config: String,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -38,7 +41,7 @@ fn main() -> anyhow::Result<()> {
 		sim.execute().unwrap();
 	});
 
-	sim.test().unwrap();
+	sim.test(args.config).unwrap();
 
 	Ok(())
 }

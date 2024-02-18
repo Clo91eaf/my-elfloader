@@ -1,5 +1,6 @@
 use crate::{info, trace};
 use fst_native::*;
+use serde::Deserialize;
 use std::collections::HashSet;
 
 type MyFstReader = FstReader<std::io::BufReader<std::fs::File>>;
@@ -22,6 +23,11 @@ impl SignalMetadata {
 		self.names.push(name);
 		self.handle.push(handle_id);
 	}
+}
+
+#[derive(Debug, Deserialize)]
+struct Config {
+	signals: Vec<String>,
 }
 
 impl Dut {
@@ -65,7 +71,7 @@ impl Dut {
 		Ok(metadata)
 	}
 
-	pub fn test(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+	pub fn test(&mut self, config: String) -> Result<(), Box<dyn std::error::Error>> {
 		let f = std::fs::File::open(self.file.clone())
 			.unwrap_or_else(|_| panic!("Failed to open {}", self.file));
 		let mut reader = FstReader::open(std::io::BufReader::new(f)).unwrap();
@@ -80,6 +86,14 @@ impl Dut {
 			end_time = header.end_time,
 			"Header info"
 		);
+
+		info!("Reading config from file {}", config);
+		let config = std::fs::read(config)?;
+		let config: Config = serde_json::from_slice(&config)?;
+
+		info!("Iterating hierachy to get signal information");
+		let metadata = Self::collect_signals(&mut reader, &config.signals)?;
+
 
 		Ok(())
 	}
