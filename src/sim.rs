@@ -6,8 +6,7 @@ use xmas_elf::{
 	ElfFile,
 };
 
-extern crate my_elfloader;
-use my_elfloader::Spike;
+use crate::spike::Spike;
 
 pub struct Sim {
 	spike: Spike,

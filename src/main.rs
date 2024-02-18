@@ -1,4 +1,6 @@
 mod sim;
+mod dut;
+mod spike;
 
 use clap::Parser;
 use sim::Sim;
