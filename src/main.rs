@@ -5,21 +5,22 @@ mod spike;
 use clap::Parser;
 use sim::Sim;
 
-/// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-	/// Name of the person to greet
 	#[arg(short, long)]
-	file: String,
+	elf_file: String,
+
+	#[arg(short, long)]
+	fst_file: String,
 }
 
 fn main() {
 	let args = Args::parse();
 
-	let mut sim = Sim::new(1usize << 32);
+	let mut sim = Sim::new(1usize << 32, &args.fst_file);
 
-	sim.load_elf(&args.file).unwrap();
+	sim.init(&args.elf_file).unwrap();
 
 	loop {
 		sim.execute().unwrap();

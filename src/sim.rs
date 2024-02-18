@@ -7,19 +7,22 @@ use xmas_elf::{
 };
 
 use crate::spike::Spike;
+use crate::dut::Dut;
 
 pub struct Sim {
 	spike: Spike,
+	dut: Dut,
 }
 
 impl Sim {
-	pub fn new(size: usize) -> Self {
+	pub fn new(size: usize, fst_file: &str) -> Self {
 		Self {
 			spike: Spike::new(size as u64),
+			dut: Dut::new(fst_file.to_string()),
 		}
 	}
 
-	pub fn load_elf(&mut self, fname: &str) -> Result<(), Box<dyn std::error::Error>> {
+	fn load_elf(&mut self, fname: &str) -> Result<u64, Box<dyn std::error::Error>> {
 		let mut file = File::open(fname).unwrap();
 		let mut buffer = Vec::new();
 		file.read_to_end(&mut buffer).unwrap();
@@ -50,8 +53,12 @@ impl Sim {
 			}
 		}
 
-		// init the spike with the entry point.
-		self.spike.init(header.pt2.entry_point()).unwrap();
+		Ok(header.pt2.entry_point())
+	}
+
+	pub fn init(&mut self, elf_file: &str) -> Result<(), Box<dyn std::error::Error>> {
+		let entry_addr = self.load_elf(elf_file).unwrap();
+		self.spike.init(entry_addr).unwrap();
 
 		Ok(())
 	}
