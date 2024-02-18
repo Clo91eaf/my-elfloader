@@ -68,4 +68,10 @@ impl Sim {
 
 		Ok(())
 	}
+
+	pub fn test(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+		self.dut.test().unwrap();
+
+		Ok(())
+	}
 }
