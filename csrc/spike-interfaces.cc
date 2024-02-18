@@ -2,39 +2,22 @@
 
 class sim_t : public simif_t {
  public:
-  sim_t(uint64_t size) {
-    mem = new char[size];
-    mem_size = size;
-  }
-  ~sim_t() { delete[] mem; }
-  char* addr_to_mem(reg_t addr) override {
-    return &mem[addr];
-  }
-
+  sim_t() {}
+  ~sim_t() {}
+  char* addr_to_mem(reg_t addr) override { return rs_addr_to_mem(addr); }
   bool mmio_load(reg_t addr, size_t len, uint8_t* bytes) override {}
   bool mmio_store(reg_t addr, size_t len, const uint8_t* bytes) override {}
-
-  bool load_elf(reg_t addr, size_t len, const uint8_t* bytes) {
-    memcpy(&mem[addr], bytes, len);
-    return true;
-  }
-
   virtual void proc_reset(unsigned id) override {}
   virtual const char* get_symbol(uint64_t addr) override {}
   [[nodiscard]] const cfg_t& get_cfg() const override {}
   [[nodiscard]] const std::map<size_t, processor_t*>& get_harts() const override {}
-
- private:
-  char* mem;
-  uint64_t mem_size;
 };
 
 class Spike {
  public:
-  Spike(uint64_t mem_size);
+  Spike() {}
 
   processor_t* get_proc() { return &proc; }
-  sim_t* get_sim() { return &sim; }
 
  private:
   std::string varch;
@@ -44,8 +27,8 @@ class Spike {
   processor_t proc;
 };
 
-Spike::Spike(uint64_t mem_size)
-    : sim(mem_size),
+Spike::Spike()
+    : sim(),
       varch(fmt::format("vlen:{},elen:{}", 1024, 32)),
       isa("rv32gcv", "M"),
       cfg(/*default_initrd_bounds=*/std::make_pair((reg_t)0, (reg_t)0),
@@ -128,7 +111,6 @@ int32_t spike_execute(uint64_t spike) {
   return SPIKE_SUCCESS;
 }
 
-
 int32_t spike_get_reg(uint64_t spike, uint64_t index, uint64_t* content) {
   Spike* s = (Spike*)spike;
   processor_t* proc = s->get_proc();
@@ -148,30 +130,10 @@ int32_t spike_set_reg(uint64_t spike, uint64_t index, uint64_t content) {
   return SPIKE_SUCCESS;
 }
 
-int32_t spike_ld(uint64_t spike, uint64_t addr, uint64_t len, uint8_t* bytes) {
-  Spike* s = (Spike*)spike;
-  processor_t* proc = s->get_proc();
-  sim_t* sim = s->get_sim();
-  bool success = sim->mmio_load(addr, len, bytes);
-  if (success) {
-    return SPIKE_SUCCESS;
-  } else {
-    return SPIKE_LOAD_ERROR;
-  }
-}
-
-int32_t spike_sd(uint64_t spike, uint64_t addr, uint64_t len, uint8_t* bytes) {
-  Spike* s = (Spike*)spike;
-  sim_t* sim = s->get_sim();
-  bool success = sim->mmio_store(addr, len, bytes);
-  if (success) {
-    return SPIKE_SUCCESS;
-  } else {
-    return SPIKE_STORE_ERROR;
-  }
-}
-
-int32_t spike_ld_elf(uint64_t spike, uint64_t addr, uint64_t len, uint8_t* bytes) {
+int32_t spike_ld_elf(uint64_t spike,
+                     uint64_t addr,
+                     uint64_t len,
+                     uint8_t* bytes) {
   Spike* s = (Spike*)spike;
   sim_t* sim = s->get_sim();
   bool success = sim->load_elf(addr, len, bytes);

@@ -6,18 +6,18 @@ use xmas_elf::{
 	ElfFile,
 };
 
-use crate::spike::Spike;
+use crate::spike::*;
 use crate::dut::Dut;
+use crate::{info, trace};
 
 pub struct Difftest {
-	spike: Spike,
 	dut: Dut,
 }
 
 impl Difftest {
 	pub fn new(size: usize, fst_file: &str) -> Self {
+		spike_new(size).unwrap();
 		Self {
-			spike: Spike::new(size as u64),
 			dut: Dut::new(fst_file.to_string()),
 		}
 	}
@@ -42,11 +42,9 @@ impl Difftest {
 						let addr = ph.virtual_addr as usize;
 
 						let slice = &buffer[offset..offset + size];
-						assert!(addr + size < self.spike.size);
-						println!("addr: {addr}, size: 0x{:x}", size);
-						self
-							.spike
-							.ld_elf(addr as u64, size as u64, slice.as_ptr() as *mut u8).unwrap();
+						assert!(addr + size < spike_size());
+						info!("addr: {addr}, size: 0x{:x}", size);
+						spike_ld(addr, size, slice.to_vec()).unwrap();
 					}
 				}
 				_ => (),

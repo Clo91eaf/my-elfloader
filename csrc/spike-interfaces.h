@@ -38,6 +38,8 @@ int32_t spike_sd(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
 int32_t spike_ld_elf(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
 int32_t spike_init(uint64_t spike, uint64_t entry_addr);
 
+extern char* rs_addr_to_mem(reg_t addr);
+
 #ifdef __cplusplus
 }
 #endif

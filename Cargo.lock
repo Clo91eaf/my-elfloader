@@ -302,6 +302,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fst-native",
+ "lazy_static",
  "libc",
  "libloading",
  "serde",
