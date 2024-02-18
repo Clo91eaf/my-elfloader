@@ -67,17 +67,10 @@ enum ErrorCode {
   SPIKE_INVALID_REG,
 };
 
-uint64_t spike_new(uint64_t mem_size) {
+uint64_t spike_new() {
   Spike* spike = new Spike(mem_size);
 
   return (uint64_t)spike;
-}
-
-int32_t spike_delete(uint64_t spike) {
-  Spike* s = (Spike*)spike;
-  delete s;
-
-  return SPIKE_SUCCESS;
 }
 
 int32_t spike_execute(uint64_t spike) {
@@ -108,25 +101,6 @@ int32_t spike_execute(uint64_t spike) {
     }
   }
 
-  return SPIKE_SUCCESS;
-}
-
-int32_t spike_get_reg(uint64_t spike, uint64_t index, uint64_t* content) {
-  Spike* s = (Spike*)spike;
-  processor_t* proc = s->get_proc();
-  state_t* state = proc->get_state();
-  *content = state->XPR[index];
-  return SPIKE_SUCCESS;
-}
-
-int32_t spike_set_reg(uint64_t spike, uint64_t index, uint64_t content) {
-  Spike* s = (Spike*)spike;
-  processor_t* proc = s->get_proc();
-  if (index >= NXPR) {
-    return SPIKE_INVALID_REG;
-  }
-  state_t* state = proc->get_state();
-  state->XPR.write(index, content);
   return SPIKE_SUCCESS;
 }
 
