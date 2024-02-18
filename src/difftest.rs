@@ -9,12 +9,12 @@ use xmas_elf::{
 use crate::spike::Spike;
 use crate::dut::Dut;
 
-pub struct Sim {
+pub struct Difftest {
 	spike: Spike,
 	dut: Dut,
 }
 
-impl Sim {
+impl Difftest {
 	pub fn new(size: usize, fst_file: &str) -> Self {
 		Self {
 			spike: Spike::new(size as u64),

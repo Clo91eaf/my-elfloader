@@ -1,9 +1,9 @@
 mod dut;
-mod sim;
+mod difftest;
 mod spike;
 
 use clap::Parser;
-use sim::Sim;
+use difftest::Difftest;
 use tracing::{info, trace, Level};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
@@ -33,15 +33,15 @@ fn main() -> anyhow::Result<()> {
 
 	let args = Args::parse();
 
-	let mut sim = Sim::new(1usize << 32, &args.fst_file);
+	let mut diff = Difftest::new(1usize << 32, &args.fst_file);
 
-	sim.init(&args.elf_file).unwrap();
+	diff.init(&args.elf_file).unwrap();
 
 	(1..10).for_each(|_| {
-		sim.execute().unwrap();
+		diff.execute().unwrap();
 	});
 
-	sim.test(args.config).unwrap();
+	diff.test(args.config).unwrap();
 
 	Ok(())
 }
