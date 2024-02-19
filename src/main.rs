@@ -38,11 +38,14 @@ fn main() -> anyhow::Result<()> {
 
 	diff.init(&args.elf_file).unwrap();
 
-	(1..10).for_each(|_| {
+	// (1..10).for_each(|_| {
+	// 	diff.execute().unwrap();
+	// });
+	loop {
 		diff.execute().unwrap();
-	});
+	}
 
-	diff.test(args.config).unwrap();
+	// diff.test(args.config).unwrap();
 
 	Ok(())
 }

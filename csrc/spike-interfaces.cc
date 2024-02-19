@@ -1,5 +1,8 @@
 #include "spike-interfaces.h"
 
+// Rust callback for memory access
+rust_callback rs_addr_to_mem;
+
 class sim_t : public simif_t {
  public:
   sim_t() {}
@@ -119,7 +122,11 @@ int32_t spike_init(uint64_t spike, uint64_t entry_addr) {
 }
 
 int32_t spike_register_callback(rust_callback callback) {
+  std::cerr << "Callback registered\n";
+
   rs_addr_to_mem = callback;
+
+  std::cerr << "Callback registered\n";
 
   return SPIKE_SUCCESS;
 }

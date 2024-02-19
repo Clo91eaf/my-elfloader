@@ -29,9 +29,7 @@
 extern "C" {
 #endif
 
-// Rust callback for memory access
-using rust_callback = std::function<char*(reg_t)>;
-rust_callback rs_addr_to_mem;
+typedef char* (*rust_callback)(reg_t);
 
 uint64_t spike_new();
 int32_t spike_execute(uint64_t spike);
