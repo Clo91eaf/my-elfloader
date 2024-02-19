@@ -23,7 +23,7 @@ impl Difftest {
 		}
 	}
 
-	fn load_elf(&mut self, fname: &str) -> Result<u64, Box<dyn std::error::Error>> {
+	fn load_elf(&mut self, fname: &str) -> anyhow::Result<u64> {
 		let mut file = File::open(fname).unwrap();
 		let mut buffer = Vec::new();
 		file.read_to_end(&mut buffer).unwrap();
@@ -55,20 +55,20 @@ impl Difftest {
 		Ok(header.pt2.entry_point())
 	}
 
-	pub fn init(&mut self, elf_file: &str) -> Result<(), Box<dyn std::error::Error>> {
+	pub fn init(&mut self, elf_file: &str) -> anyhow::Result<()> {
 		let entry_addr = self.load_elf(elf_file).unwrap();
 		self.spike.init(entry_addr).unwrap();
 
 		Ok(())
 	}
 
-	pub fn execute(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+	pub fn execute(&mut self) -> anyhow::Result<()> {
 		self.spike.exec().unwrap();
 
 		Ok(())
 	}
 
-	pub fn test(&mut self, config: String) -> Result<(), Box<dyn std::error::Error>> {
+	pub fn test(&mut self, config: String) -> anyhow::Result<()> {
 		self.dut.test(config).unwrap();
 
 		Ok(())

@@ -5,8 +5,8 @@ use crate::{info, trace};
 #[link(name = "spike-interfaces")]
 extern "C" {
 	pub fn spike_new() -> u64;
-	pub fn spike_execute(spike: u64) -> i32;
-	pub fn spike_init(spike: u64, entry_addr: u64) -> i32;
+	pub fn spike_execute() -> i32;
+	pub fn spike_init(entry_addr: u64) -> i32;
 	pub fn spike_register_callback(cb: extern fn(u64) -> *mut u8) -> i32;
 }
 
@@ -68,10 +68,10 @@ impl SpikeHandle {
 	}
 
 	pub fn exec(&self) -> anyhow::Result<i32> {
-		unsafe { Ok(spike_execute(self.id)) }
+		unsafe { Ok(spike_execute()) }
 	}
 
 	pub fn init(&self, entry_addr: u64) -> anyhow::Result<i32> {
-		unsafe { Ok(spike_init(self.id, entry_addr)) }
+		unsafe { Ok(spike_init(entry_addr)) }
 	}
 }

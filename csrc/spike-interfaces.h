@@ -31,9 +31,9 @@ extern "C" {
 
 typedef char* (*rust_callback)(reg_t);
 
-uint64_t spike_new();
-int32_t spike_execute(uint64_t spike);
-int32_t spike_init(uint64_t spike, uint64_t entry_addr);
+int32_t spike_new();
+int32_t spike_execute();
+int32_t spike_init(uint64_t entry_addr);
 int32_t spike_register_callback(rust_callback callback);
 
 #ifdef __cplusplus

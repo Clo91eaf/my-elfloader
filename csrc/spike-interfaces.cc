@@ -60,25 +60,21 @@ Spike::Spike()
   proc.enable_log_commits();
 }
 
-// Error codes
-enum ErrorCode {
-  SPIKE_SUCCESS,
-  SPIKE_ERROR,
-  SPIKE_LOAD_ERROR,
-  SPIKE_LOAD_ELF_ERROR,
-  SPIKE_STORE_ERROR,
-  SPIKE_INVALID_REG,
+static Spike* spike;
+
+enum {
+  SPIKE_SUCCESS = 0,
+  SPIKE_FAIL = -1,
 };
 
-uint64_t spike_new() {
-  Spike* spike = new Spike();
+int32_t spike_new() {
+  spike = new Spike();
 
-  return (uint64_t)spike;
+  return SPIKE_SUCCESS;
 }
 
-int32_t spike_execute(uint64_t spike) {
-  Spike* s = (Spike*)spike;
-  processor_t* proc = s->get_proc();
+int32_t spike_execute() {
+  processor_t* proc = spike->get_proc();
 
   auto state = proc->get_state();
   auto fetch = proc->get_mmu()->load_insn(state->pc);
@@ -107,11 +103,10 @@ int32_t spike_execute(uint64_t spike) {
   return SPIKE_SUCCESS;
 }
 
-int32_t spike_init(uint64_t spike, uint64_t entry_addr) {
-  Spike* s = (Spike*)spike;
-  processor_t* proc = s->get_proc();
+int32_t spike_init(uint64_t entry_addr) {
+  processor_t* proc = spike->get_proc();
 
-  proc->reset();
+  proc->reset(); // c api
 
   // Set the virtual supervisor mode and virtual user mode
   // auto status = proc->get_state()->sstatus->read() | SSTATUS_VS | SSTATUS_FS;
@@ -122,11 +117,7 @@ int32_t spike_init(uint64_t spike, uint64_t entry_addr) {
 }
 
 int32_t spike_register_callback(rust_callback callback) {
-  std::cerr << "Callback registered\n";
-
   rs_addr_to_mem = callback;
-
-  std::cerr << "Callback registered\n";
 
   return SPIKE_SUCCESS;
 }
