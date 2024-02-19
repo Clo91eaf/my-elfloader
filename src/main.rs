@@ -31,6 +31,7 @@ fn main() -> anyhow::Result<()> {
 	tracing::subscriber::set_global_default(global_logger)
 		.expect("internal error: fail to setup log subscriber");
 
+	info!("Hello, world!");
 	let args = Args::parse();
 
 	let mut diff = Difftest::new(1usize << 32, &args.fst_file);

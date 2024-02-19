@@ -1,17 +1,18 @@
 use lazy_static::lazy_static;
 use std::sync::Mutex;
+use crate::{info, trace};
 
 #[link(name = "spike-interfaces")]
 extern "C" {
 	pub fn spike_new() -> u64;
 	pub fn spike_execute(spike: u64) -> i32;
 	pub fn spike_init(spike: u64, entry_addr: u64) -> i32;
+	pub fn spike_register_callback(cb: extern fn(u64) -> *mut u8) -> i32;
 }
 
-#[no_mangle]
 // read the addr from spike memory
 // caller should make sure the address is valid
-pub extern "C" fn rs_addr_to_mem(addr: u64) -> *mut u8 {
+extern "C" fn rs_addr_to_mem(addr: u64) -> *mut u8 {
 	let addr = addr as usize;
 	let mut spike = SPIKE.lock().unwrap();
 	let spike_mut = spike.as_mut().unwrap();
@@ -32,18 +33,27 @@ pub struct SpikeHandle {
 }
 
 impl SpikeHandle {
-	pub fn new(mem_size: usize) -> Self {
+	pub fn new(size: usize) -> Self {
+		info!("1");
+		// register the callback function
+		unsafe { spike_register_callback(rs_addr_to_mem);}
+		info!("2");
+
+		// create a new spike instance
 		let mut spike_opt = SPIKE.lock().unwrap();
 		if spike_opt.is_none() {
-			println!("Creating Spike with size: {}", mem_size);
+			info!("Creating Spike with size: {}", size);
 			*spike_opt = Some(Box::new(Spike {
-				mem: vec![0; mem_size],
+				mem: vec![0; size],
 			}));
 		}
 
+		// get the spike id
+		let id = unsafe { spike_new() };
+		info!("Spike id: {}", id);
 		SpikeHandle {
-			size: mem_size,
-			id: unsafe { spike_new() },
+			size,
+			id,
 		}
 	}
 
@@ -60,16 +70,10 @@ impl SpikeHandle {
 	}
 
 	pub fn exec(&self) -> anyhow::Result<i32> {
-		let spike = SPIKE.lock().unwrap();
-		let spike_ref = spike.as_ref().unwrap();
-
 		unsafe { Ok(spike_execute(self.id)) }
 	}
 
 	pub fn init(&self, entry_addr: u64) -> anyhow::Result<i32> {
-		let spike = SPIKE.lock().unwrap();
-		let spike_ref = spike.as_ref().unwrap();
-
 		unsafe { Ok(spike_init(self.id, entry_addr)) }
 	}
 }

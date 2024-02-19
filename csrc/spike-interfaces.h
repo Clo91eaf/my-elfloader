@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <functional>
 
 #include <fmt/core.h>
 #include <fmt/ranges.h>
@@ -28,17 +29,14 @@
 extern "C" {
 #endif
 
-uint64_t spike_new(uint64_t mem_size);
-int32_t spike_delete(uint64_t spike);
-int32_t spike_execute(uint64_t spike);
-int32_t spike_get_reg(uint64_t spike, uint64_t index, uint64_t *content);
-int32_t spike_set_reg(uint64_t spike, uint64_t index, uint64_t content);
-int32_t spike_ld(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
-int32_t spike_sd(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
-int32_t spike_ld_elf(uint64_t spike, uint64_t addr, uint64_t len, uint8_t *bytes);
-int32_t spike_init(uint64_t spike, uint64_t entry_addr);
+// Rust callback for memory access
+using rust_callback = std::function<char*(reg_t)>;
+rust_callback rs_addr_to_mem;
 
-extern char* rs_addr_to_mem(reg_t addr);
+uint64_t spike_new();
+int32_t spike_execute(uint64_t spike);
+int32_t spike_init(uint64_t spike, uint64_t entry_addr);
+int32_t spike_register_callback(rust_callback callback);
 
 #ifdef __cplusplus
 }

@@ -10,13 +10,13 @@ class sim_t : public simif_t {
   virtual void proc_reset(unsigned id) override {}
   virtual const char* get_symbol(uint64_t addr) override {}
   [[nodiscard]] const cfg_t& get_cfg() const override {}
-  [[nodiscard]] const std::map<size_t, processor_t*>& get_harts() const override {}
+  [[nodiscard]] const std::map<size_t, processor_t*>& get_harts()
+      const override {}
 };
 
 class Spike {
  public:
-  Spike() {}
-
+  Spike();
   processor_t* get_proc() { return &proc; }
 
  private:
@@ -68,7 +68,7 @@ enum ErrorCode {
 };
 
 uint64_t spike_new() {
-  Spike* spike = new Spike(mem_size);
+  Spike* spike = new Spike();
 
   return (uint64_t)spike;
 }
@@ -104,20 +104,6 @@ int32_t spike_execute(uint64_t spike) {
   return SPIKE_SUCCESS;
 }
 
-int32_t spike_ld_elf(uint64_t spike,
-                     uint64_t addr,
-                     uint64_t len,
-                     uint8_t* bytes) {
-  Spike* s = (Spike*)spike;
-  sim_t* sim = s->get_sim();
-  bool success = sim->load_elf(addr, len, bytes);
-  if (success) {
-    return SPIKE_SUCCESS;
-  } else {
-    return SPIKE_LOAD_ELF_ERROR;
-  }
-}
-
 int32_t spike_init(uint64_t spike, uint64_t entry_addr) {
   Spike* s = (Spike*)spike;
   processor_t* proc = s->get_proc();
@@ -128,6 +114,12 @@ int32_t spike_init(uint64_t spike, uint64_t entry_addr) {
   // auto status = proc->get_state()->sstatus->read() | SSTATUS_VS | SSTATUS_FS;
   // proc->get_state()->sstatus->write(status);
   proc->get_state()->pc = entry_addr;
+
+  return SPIKE_SUCCESS;
+}
+
+int32_t spike_register_callback(rust_callback callback) {
+  rs_addr_to_mem = callback;
 
   return SPIKE_SUCCESS;
 }
